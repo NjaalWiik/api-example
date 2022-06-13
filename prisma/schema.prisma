@@ -17,6 +17,8 @@ model Product {
 
   url        String @unique
   pricespyId Int
+
+  @@map("products")
 }
 
 model Shop {
