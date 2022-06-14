@@ -29,7 +29,7 @@ model Shop {
   pricespyId         Int?    @unique
   name               String
   companyName        String?
-  rootDomain         String  @unique
+  rootDomain         String? @unique
   logo176            String?
   logo88             String?
   externalUri        String?
