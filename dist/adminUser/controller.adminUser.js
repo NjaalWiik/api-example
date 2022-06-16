@@ -12,38 +12,40 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthController = void 0;
+exports.AdminUserController = void 0;
 const common_1 = require("@nestjs/common");
-const auth_service_1 = require("./auth.service");
-let AuthController = class AuthController {
-    constructor(authService) {
-        this.authService = authService;
+const dto_1 = require("./dto");
+const service_adminUser_1 = require("./service.adminUser");
+let AdminUserController = class AdminUserController {
+    constructor(adminUserService) {
+        this.adminUserService = adminUserService;
     }
-    signup(dto) {
-        return this.authService.signup(dto);
+    getMe(adminUser) {
+        return adminUser;
     }
-    signin(dto) {
-        return this.authService.signin(dto);
+    editAdminUser(adminUserId, dto) {
+        return this.adminUserService.editAdminUser(adminUserId, dto);
     }
 };
 __decorate([
-    (0, common_1.Post)('signup'),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Get)('me'),
+    __param(0, GetAdminUser()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], AuthController.prototype, "signup", null);
+], AdminUserController.prototype, "getMe", null);
 __decorate([
-    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, common_1.Post)('signin'),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Patch)(),
+    __param(0, GetAdminUser('id')),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Number, dto_1.EditAdminUserDto]),
     __metadata("design:returntype", void 0)
-], AuthController.prototype, "signin", null);
-AuthController = __decorate([
-    (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
-], AuthController);
-exports.AuthController = AuthController;
-//# sourceMappingURL=auth.controller.js.map
+], AdminUserController.prototype, "editAdminUser", null);
+AdminUserController = __decorate([
+    (0, common_1.UseGuards)(JwtGuard),
+    (0, common_1.Controller)('adminUsers'),
+    __metadata("design:paramtypes", [service_adminUser_1.AdminUserService])
+], AdminUserController);
+exports.AdminUserController = AdminUserController;
+//# sourceMappingURL=controller.adminUser.js.map
