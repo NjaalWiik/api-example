@@ -71,3 +71,18 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Start dev DB
+
+Run the following command:
+
+```bash
+# start and clean the db
+$ npm run db:dev:restart
+
+# see that the db runs
+$ docker ps
+
+# See the db via Prisma
+$ npx prisma studio
+```

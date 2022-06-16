@@ -25,13 +25,13 @@ let AuthService = class AuthService {
     async signup(dto) {
         const hash = await argon.hash(dto.password);
         try {
-            const adminUser = await this.prisma.adminUser.create({
+            const user = await this.prisma.user.create({
                 data: {
                     email: dto.email,
                     hash
                 }
             });
-            return this.signToken(adminUser.id, adminUser.email);
+            return this.signToken(user.id, user.email);
         }
         catch (error) {
             if (error instanceof runtime_1.PrismaClientKnownRequestError) {
@@ -43,21 +43,21 @@ let AuthService = class AuthService {
         }
     }
     async signin(dto) {
-        const adminUser = await this.prisma.adminUser.findUnique({
+        const user = await this.prisma.user.findUnique({
             where: {
                 email: dto.email
             }
         });
-        if (!adminUser)
+        if (!user)
             throw new common_1.ForbiddenException('Credentials incorrect');
-        const pwMatches = await argon.verify(adminUser.hash, dto.password);
+        const pwMatches = await argon.verify(user.hash, dto.password);
         if (!pwMatches)
             throw new common_1.ForbiddenException('Credentials incorrect');
-        return this.signToken(adminUser.id, adminUser.email);
+        return this.signToken(user.id, user.email);
     }
-    async signToken(adminUserId, email) {
+    async signToken(userId, email) {
         const payload = {
-            sub: adminUserId,
+            sub: userId,
             email
         };
         const secret = this.config.get('JWT_SECRET');

@@ -13,6 +13,7 @@ const product_module_1 = require("./product/product.module");
 const offer_module_1 = require("./offer/offer.module");
 const prisma_module_1 = require("./prisma/prisma.module");
 const config_1 = require("@nestjs/config");
+const user_module_1 = require("./user/user.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -20,6 +21,7 @@ AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
             auth_module_1.AuthModule,
+            user_module_1.UserModule,
             product_module_1.ProductModule,
             offer_module_1.OfferModule,
             prisma_module_1.PrismaModule

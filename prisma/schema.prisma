@@ -78,7 +78,7 @@ model Offer {
   feedbackNegative Int?
   clicked          Int?
 
-  shop Shop @relation(fields: [rootDomain], references: [rootDomain])
+  shop Shop @relation(fields: [rootDomain], references: [rootDomain], onDelete: Cascade)
 
   @@map("offers")
 }
