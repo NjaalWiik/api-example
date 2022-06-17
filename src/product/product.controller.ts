@@ -7,7 +7,8 @@ import {
   Patch,
   Post,
   UseGuards,
-  Query
+  Query,
+  ParseIntPipe
 } from '@nestjs/common';
 import { JwtGuard } from '../auth/guard';
 import { CreateProductDto } from './dto';
@@ -18,8 +19,8 @@ export class ProductController {
   constructor(private productService: ProductService) {}
 
   @Get()
-  getProducts(@Query('skip') skip: string, @Query('take') take: string) {
-    return this.productService.getProducts(skip, take);
+  getProducts() {
+    return this.productService.getProducts();
   }
 
   @Get(':productUrl')

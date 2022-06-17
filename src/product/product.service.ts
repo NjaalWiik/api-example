@@ -2,51 +2,58 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto, EditProductDto } from './dto';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Injectable()
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  async getProducts(
-    productUrl: string,
-    params?: { skip?: number; take?: number }
-  ) {
-    const { skip, take } = params;
+  async getProducts() {
+    return this.prisma.product.findMany();
+  }
 
-    if (isNaN(skip)) {
-      return this.prisma.product.findMany({
-        take
+  async getProductByUrl(productUrl: string) {
+    return await this.prisma.product.findUnique({
+      where: {
+        url: productUrl
+      }
+    });
+  }
+
+  async createProduct(dto: CreateProductDto) {
+    try {
+      const product = await this.prisma.product.create({
+        data: {
+          url: dto.url,
+          pricespyId: dto.pricespyId
+        }
       });
-    } else {
-      return this.prisma.product.findMany({
-        skip,
-        take
-      });
+
+      return product;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ForbiddenException('Url exists');
+        }
+        throw error;
+      }
     }
   }
 
-  async getProductByUrl(productUrl: string) {}
-  async createProduct(dto: CreateProductDto) {}
-  async editProductByUrl(productUrl: string, dto: EditProductDto) {}
+  async editProductByUrl(productUrl: string, dto: EditProductDto) {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        url: productUrl
+      }
+    });
+
+    if (!product) throw new ForbiddenException('Access to resource denied');
+
+    return this.prisma.product.update({
+      where: { url: productUrl },
+      data: { ...dto }
+    });
+  }
+
   async deleteProduct(productUrl: string) {}
-
-  // async addProduct(dto: CreateProductDto) {
-  //   try {
-  //     const product = await this.prisma.product.create({
-  //       data: {
-  //         url: dto.url,
-  //         pricespyId: dto.pricespyId
-  //       }
-  //     });
-
-  //     return product;
-  //   } catch (error) {
-  //     if (error instanceof PrismaClientKnownRequestError) {
-  //       if (error.code === 'P2002') {
-  //         throw new ForbiddenException('Url exists');
-  //       }
-  //       throw error;
-  //     }
-  //   }
-  // }
 }

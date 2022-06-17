@@ -157,7 +157,11 @@ describe('App e2e', () => {
   });
 
   describe('Product', () => {
-    describe('Get products', () => {
+    const encodedUri = encodeURIComponent(
+      'https://eplehuset.no/iphone-13-128gb-bla'
+    );
+
+    describe('Get empty products', () => {
       it('Should get empty products array', () => {
         return pactum.spec().get('/products').expectStatus(200).expectBody([]);
       });
@@ -169,18 +173,53 @@ describe('App e2e', () => {
           url: 'https://eplehuset.no/iphone-13-128gb-bla',
           pricespyId: 5683804
         };
+
         return pactum
           .spec()
           .post('/products')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .withBody(dto)
-          .expectStatus(201);
+          .expectStatus(201)
+          .stores('productUrl', 'url');
+      });
+
+      describe('Get products', () => {
+        it('Should get empty products array', () => {
+          return pactum
+            .spec()
+            .get('/products')
+            .expectStatus(200)
+            .expectJsonLength(1);
+        });
       });
     });
 
-    describe('Get product by id', () => {});
+    describe('Get product by url', () => {
+      const encodedUri = encodeURIComponent(
+        'https://eplehuset.no/iphone-13-128gb-bla'
+      );
 
-    describe('Edit product by id', () => {});
+      it('Should get products array', () => {
+        return pactum
+          .spec()
+          .get('/products/{productUrl}')
+          .withPathParams('productUrl', encodedUri)
+          .expectStatus(200)
+          .expectBodyContains('https://eplehuset.no/iphone-13-128gb-bla');
+      });
+    });
+
+    describe('Edit product by id', () => {
+      it('Should edit a product', () => {
+        return pactum
+          .spec()
+          .patch('/products/{productUrl}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withPathParams('productUrl', encodedUri)
+          .expectStatus(200)
+          .expectBodyContains('https://eplehuset.no/iphone-13-128gb-bla');
+      });
+    });
 
     describe('Delete product', () => {});
   });
