@@ -9,19 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthDto = void 0;
+exports.CreateProductDto = void 0;
 const class_validator_1 = require("class-validator");
-class AuthDto {
+class CreateProductDto {
 }
-__decorate([
-    (0, class_validator_1.IsEmail)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], AuthDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], AuthDto.prototype, "password", void 0);
-exports.AuthDto = AuthDto;
-//# sourceMappingURL=auth.dto.js.map
+], CreateProductDto.prototype, "url", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Number)
+], CreateProductDto.prototype, "pricespyId", void 0);
+exports.CreateProductDto = CreateProductDto;
+//# sourceMappingURL=create-product.dto.js.map

@@ -1,42 +1,52 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from '../prisma/prisma.service';
-import { ProductDto } from './dto';
+import { CreateProductDto, EditProductDto } from './dto';
 
 @Injectable()
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  async addProduct(dto: ProductDto) {
-    try {
-      const product = await this.prisma.product.create({
-        data: {
-          url: dto.url,
-          pricespyId: dto.pricespyId
-        }
-      });
+  async getProducts(
+    productUrl: string,
+    params?: { skip?: number; take?: number }
+  ) {
+    const { skip, take } = params;
 
-      return product;
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException('Url exists');
-        }
-        throw error;
-      }
+    if (isNaN(skip)) {
+      return this.prisma.product.findMany({
+        take
+      });
+    } else {
+      return this.prisma.product.findMany({
+        skip,
+        take
+      });
     }
   }
 
-  async findProduct(dto: ProductDto) {
-    const product = await this.prisma.product.findUnique({
-      where: {
-        url: dto.url
-      }
-    });
+  async getProductByUrl(productUrl: string) {}
+  async createProduct(dto: CreateProductDto) {}
+  async editProductByUrl(productUrl: string, dto: EditProductDto) {}
+  async deleteProduct(productUrl: string) {}
 
-    // if product does not exist throw exception
-    if (!product) throw new ForbiddenException('No url found');
+  // async addProduct(dto: CreateProductDto) {
+  //   try {
+  //     const product = await this.prisma.product.create({
+  //       data: {
+  //         url: dto.url,
+  //         pricespyId: dto.pricespyId
+  //       }
+  //     });
 
-    return product;
-  }
+  //     return product;
+  //   } catch (error) {
+  //     if (error instanceof PrismaClientKnownRequestError) {
+  //       if (error.code === 'P2002') {
+  //         throw new ForbiddenException('Url exists');
+  //       }
+  //       throw error;
+  //     }
+  //   }
+  // }
 }

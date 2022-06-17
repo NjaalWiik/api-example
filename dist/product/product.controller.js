@@ -14,23 +14,68 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductController = void 0;
 const common_1 = require("@nestjs/common");
+const guard_1 = require("../auth/guard");
 const dto_1 = require("./dto");
 const product_service_1 = require("./product.service");
 let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
     }
-    addProduct(dto) {
-        return this.productService.addProduct(dto);
+    getProducts(productUrl) {
+        return this.productService.getProducts();
+    }
+    getProductByUrl(productUrl) {
+        return this.productService.getProductByUrl(productUrl);
+    }
+    createProduct(dto) {
+        return this.productService.createProduct(dto);
+    }
+    editProductByUrl(dto, productUrl) {
+        return this.productService.editProductByUrl(productUrl, dto);
+    }
+    deleteProductByUrl(productUrl) {
+        return this.productService.deleteProduct(productUrl);
     }
 };
 __decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Param)('productUrl')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ProductController.prototype, "getProducts", null);
+__decorate([
+    (0, common_1.Get)(':productUrl'),
+    __param(0, (0, common_1.Param)('productUrl')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ProductController.prototype, "getProductByUrl", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [dto_1.ProductDto]),
+    __metadata("design:paramtypes", [dto_1.CreateProductDto]),
     __metadata("design:returntype", void 0)
-], ProductController.prototype, "addProduct", null);
+], ProductController.prototype, "createProduct", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtGuard),
+    (0, common_1.Patch)(':productUrl'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('productUrl')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [dto_1.CreateProductDto, String]),
+    __metadata("design:returntype", void 0)
+], ProductController.prototype, "editProductByUrl", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtGuard),
+    (0, common_1.Delete)(':productUrl'),
+    __param(0, (0, common_1.Param)('productUrl')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ProductController.prototype, "deleteProductByUrl", null);
 ProductController = __decorate([
     (0, common_1.Controller)('product'),
     __metadata("design:paramtypes", [product_service_1.ProductService])

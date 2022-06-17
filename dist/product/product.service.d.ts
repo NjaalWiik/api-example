@@ -1,8 +1,11 @@
 import { PrismaService } from '../prisma/prisma.service';
-import { ProductDto } from './dto';
+import { CreateProductDto, EditProductDto } from './dto';
 export declare class ProductService {
     private prisma;
     constructor(prisma: PrismaService);
-    addProduct(dto: ProductDto): Promise<import(".prisma/client").Product>;
-    findProduct(dto: ProductDto): Promise<import(".prisma/client").Product>;
+    getProducts(): Promise<void>;
+    getProductByUrl(productUrl: string): Promise<void>;
+    createProduct(dto: CreateProductDto): Promise<void>;
+    editProductByUrl(productUrl: string, dto: EditProductDto): Promise<void>;
+    deleteProduct(productUrl: string): Promise<void>;
 }

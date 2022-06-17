@@ -1,13 +1,11 @@
 import { Test } from '@nestjs/testing';
 import * as pactum from 'pactum';
 import { AppModule } from '../src/app.module';
-import {
-  ConsoleLogger,
-  INestApplication,
-  ValidationPipe
-} from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { PrismaService } from '../src/prisma/prisma.service';
-import { AuthDto } from 'src/auth/dto';
+import { AuthDto } from '../src/auth/dto';
+import { EditUserDto } from '../src/user/dto';
+import { CreateProductDto } from 'src/product/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -119,21 +117,81 @@ describe('App e2e', () => {
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .expectStatus(200);
       });
+      it('Should throw if invalid bearer token', () => {
+        return pactum
+          .spec()
+          .get('/users/me')
+          .withHeaders({ Authorization: 'Bearer randomnontoken' })
+          .expectStatus(401);
+      });
+      it('Should throw if no bearer token', () => {
+        return pactum.spec().get('/users/me').expectStatus(401);
+      });
     });
-    describe('Edit user', () => {});
+
+    describe('Edit user', () => {
+      const dto: EditUserDto = { firstName: 'Pixell', lastName: 'AS' };
+
+      it('Should edit user', () => {
+        return pactum
+          .spec()
+          .patch('/users')
+          .withBody(dto)
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .expectStatus(200)
+          .expectBodyContains(dto.firstName)
+          .expectBodyContains(dto.lastName);
+      });
+      it('Should throw if invalid bearer token', () => {
+        return pactum
+          .spec()
+          .patch('/users')
+          .withBody(dto)
+          .withHeaders({ Authorization: 'Bearer randomtoken' })
+          .expectStatus(401);
+      });
+      it('Should throw if no bearer token', () => {
+        return pactum.spec().patch('/users').withBody(dto).expectStatus(401);
+      });
+    });
+  });
+
+  describe('Product', () => {
+    describe('Get products', () => {
+      it('Should get empty products array', () => {
+        return pactum.spec().get('/products').expectStatus(200).expectBody([]);
+      });
+    });
+
+    describe('Create product', () => {
+      it('should create product', () => {
+        const dto: CreateProductDto = {
+          url: 'https://eplehuset.no/iphone-13-128gb-bla',
+          pricespyId: 5683804
+        };
+        return pactum
+          .spec()
+          .post('/products')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(201);
+      });
+    });
+
+    describe('Get product by id', () => {});
+
+    describe('Edit product by id', () => {});
+
+    describe('Delete product', () => {});
   });
 
   describe('Offer', () => {
     describe('Create offer', () => {});
-    describe('Get offers', () => {});
-    describe('Get offer by id', () => {});
-    describe('Delete offer', () => {});
-  });
 
-  describe('Product', () => {
-    describe('Create product', () => {});
-    describe('Get product', () => {});
-    describe('Get product by id', () => {});
-    describe('Delete product', () => {});
+    describe('Get offers', () => {});
+
+    describe('Get offer by id', () => {});
+
+    describe('Delete offer', () => {});
   });
 });
