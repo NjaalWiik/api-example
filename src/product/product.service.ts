@@ -2,7 +2,6 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto, EditProductDto } from './dto';
-import { PaginationDto } from './dto/pagination.dto';
 
 @Injectable()
 export class ProductService {

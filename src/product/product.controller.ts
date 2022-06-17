@@ -11,7 +11,7 @@ import {
   ParseIntPipe
 } from '@nestjs/common';
 import { JwtGuard } from '../auth/guard';
-import { CreateProductDto } from './dto';
+import { CreateProductDto, EditProductDto } from './dto';
 import { ProductService } from './product.service';
 
 @Controller('products')
@@ -37,7 +37,7 @@ export class ProductController {
   @UseGuards(JwtGuard)
   @Patch(':productUrl')
   editProductByUrl(
-    @Body() dto: CreateProductDto,
+    @Body() dto: EditProductDto,
     @Param('productUrl') productUrl: string
   ) {
     return this.productService.editProductByUrl(productUrl, dto);

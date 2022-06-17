@@ -5,7 +5,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from '../src/user/dto';
-import { CreateProductDto } from 'src/product/dto';
+import { CreateProductDto, EditProductDto } from 'src/product/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -210,14 +210,20 @@ describe('App e2e', () => {
     });
 
     describe('Edit product by id', () => {
+      const dto: EditProductDto = {
+        url: 'https://chillout.no/products/jetboil-zip',
+        pricespyId: 865244
+      };
       it('Should edit a product', () => {
         return pactum
           .spec()
           .patch('/products/{productUrl}')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .withPathParams('productUrl', encodedUri)
+          .withBody(dto)
           .expectStatus(200)
-          .expectBodyContains('https://eplehuset.no/iphone-13-128gb-bla');
+          .expectBodyContains('https://chillout.no/products/jetboil-zip')
+          .inspect();
       });
     });
 
