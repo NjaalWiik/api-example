@@ -46,6 +46,7 @@ model Shop {
   rootDomain         String? @unique
   logo176            String?
   logo88             String?
+  favicon            String?
   externalUri        String?
   information        String?
   countryCode        String?
@@ -72,6 +73,7 @@ model Offer {
   validTo          DateTime?
   validFrom        DateTime?
   amount           String
+  amountType       String
   verifiedCoupon   Boolean?
   status           String?
   feedbackPositive Int?

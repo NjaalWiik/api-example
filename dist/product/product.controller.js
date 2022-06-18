@@ -21,7 +21,7 @@ let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
     }
-    getProducts(productUrl) {
+    getProducts() {
         return this.productService.getProducts();
     }
     getProductByUrl(productUrl) {
@@ -39,9 +39,8 @@ let ProductController = class ProductController {
 };
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Param)('productUrl')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ProductController.prototype, "getProducts", null);
 __decorate([
@@ -65,10 +64,11 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('productUrl')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [dto_1.CreateProductDto, String]),
+    __metadata("design:paramtypes", [dto_1.EditProductDto, String]),
     __metadata("design:returntype", void 0)
 ], ProductController.prototype, "editProductByUrl", null);
 __decorate([
+    (0, common_1.HttpCode)(common_1.HttpStatus.NO_CONTENT),
     (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Delete)(':productUrl'),
     __param(0, (0, common_1.Param)('productUrl')),
@@ -77,7 +77,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ProductController.prototype, "deleteProductByUrl", null);
 ProductController = __decorate([
-    (0, common_1.Controller)('product'),
+    (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [product_service_1.ProductService])
 ], ProductController);
 exports.ProductController = ProductController;

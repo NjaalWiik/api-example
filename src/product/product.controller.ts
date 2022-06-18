@@ -8,7 +8,9 @@ import {
   Post,
   UseGuards,
   Query,
-  ParseIntPipe
+  ParseIntPipe,
+  HttpCode,
+  HttpStatus
 } from '@nestjs/common';
 import { JwtGuard } from '../auth/guard';
 import { CreateProductDto, EditProductDto } from './dto';
@@ -43,6 +45,7 @@ export class ProductController {
     return this.productService.editProductByUrl(productUrl, dto);
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(JwtGuard)
   @Delete(':productUrl')
   deleteProductByUrl(@Param('productUrl') productUrl: string) {

@@ -11,16 +11,59 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductService = void 0;
 const common_1 = require("@nestjs/common");
+const runtime_1 = require("@prisma/client/runtime");
 const prisma_service_1 = require("../prisma/prisma.service");
 let ProductService = class ProductService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async getProducts() { }
-    async getProductByUrl(productUrl) { }
-    async createProduct(dto) { }
-    async editProductByUrl(productUrl, dto) { }
-    async deleteProduct(productUrl) { }
+    async getProducts() {
+        return this.prisma.product.findMany();
+    }
+    async getProductByUrl(productUrl) {
+        return await this.prisma.product.findUnique({
+            where: {
+                url: productUrl
+            }
+        });
+    }
+    async createProduct(dto) {
+        try {
+            const product = await this.prisma.product.create({
+                data: {
+                    url: dto.url,
+                    pricespyId: dto.pricespyId
+                }
+            });
+            return product;
+        }
+        catch (error) {
+            if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    throw new common_1.ForbiddenException('Url exists');
+                }
+                throw error;
+            }
+        }
+    }
+    async editProductByUrl(productUrl, dto) {
+        const product = await this.prisma.product.findUnique({
+            where: {
+                url: productUrl
+            }
+        });
+        if (!product)
+            throw new common_1.ForbiddenException('Access to resource denied');
+        return this.prisma.product.update({
+            where: { url: productUrl },
+            data: Object.assign({}, dto)
+        });
+    }
+    async deleteProduct(productUrl) {
+        return this.prisma.product.delete({
+            where: { url: productUrl }
+        });
+    }
 };
 ProductService = __decorate([
     (0, common_1.Injectable)(),

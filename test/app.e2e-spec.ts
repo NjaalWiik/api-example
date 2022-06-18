@@ -6,6 +6,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from '../src/user/dto';
 import { CreateProductDto, EditProductDto } from 'src/product/dto';
+import { inspect } from 'util';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -222,12 +223,33 @@ describe('App e2e', () => {
           .withPathParams('productUrl', encodedUri)
           .withBody(dto)
           .expectStatus(200)
-          .expectBodyContains('https://chillout.no/products/jetboil-zip')
-          .inspect();
+          .expectBodyContains(dto.pricespyId)
+          .expectBodyContains(dto.url);
       });
     });
 
-    describe('Delete product', () => {});
+    describe('Delete product', () => {
+      const updatedEncodedUri = encodeURIComponent(
+        'https://chillout.no/products/jetboil-zip'
+      );
+
+      it('Should delete a product', () => {
+        return pactum
+          .spec()
+          .delete('/products/{productUrl}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withPathParams('productUrl', updatedEncodedUri)
+          .expectStatus(204);
+      });
+      it('Should get empty product', () => {
+        return pactum
+          .spec()
+          .get('/products')
+          .expectStatus(200)
+          .expectJsonLength(0)
+          .inspect();
+      });
+    });
   });
 
   describe('Offer', () => {

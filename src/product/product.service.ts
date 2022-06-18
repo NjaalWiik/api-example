@@ -54,5 +54,9 @@ export class ProductService {
     });
   }
 
-  async deleteProduct(productUrl: string) {}
+  async deleteProduct(productUrl: string) {
+    return this.prisma.product.delete({
+      where: { url: productUrl }
+    });
+  }
 }
