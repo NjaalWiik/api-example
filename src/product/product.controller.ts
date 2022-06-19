@@ -7,8 +7,6 @@ import {
   Patch,
   Post,
   UseGuards,
-  Query,
-  ParseIntPipe,
   HttpCode,
   HttpStatus
 } from '@nestjs/common';

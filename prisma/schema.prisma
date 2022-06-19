@@ -72,7 +72,7 @@ model Offer {
   trackinUrl       String?
   validTo          DateTime?
   validFrom        DateTime?
-  amount           String
+  amount           Int
   amountType       String
   verifiedCoupon   Boolean?
   status           String?

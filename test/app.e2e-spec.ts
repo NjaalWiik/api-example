@@ -7,6 +7,7 @@ import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from '../src/user/dto';
 import { CreateProductDto, EditProductDto } from 'src/product/dto';
 import { inspect } from 'util';
+import { CreateOfferDto } from 'src/offer/dto/create-offer.dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -181,7 +182,8 @@ describe('App e2e', () => {
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .withBody(dto)
           .expectStatus(201)
-          .stores('productUrl', 'url');
+          .stores('productUrl', 'url')
+          .inspect();
       });
 
       describe('Get products', () => {
@@ -246,14 +248,29 @@ describe('App e2e', () => {
           .spec()
           .get('/products')
           .expectStatus(200)
-          .expectJsonLength(0)
-          .inspect();
+          .expectJsonLength(0);
       });
     });
   });
 
   describe('Offer', () => {
-    describe('Create offer', () => {});
+    describe('Create offer', () => {
+      const dto: CreateOfferDto = {
+        rootDomain: 'test.no',
+        type: 'coupon',
+        amount: 100,
+        amountType: '%'
+      };
+
+      it('Should create user', () => {
+        return pactum
+          .spec()
+          .post('/offers')
+          .withBody(dto)
+          .expectStatus(201)
+          .inspect();
+      });
+    });
 
     describe('Get offers', () => {});
 
