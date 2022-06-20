@@ -47,7 +47,6 @@ export class ShopService {
     });
 
     if (!shop) throw new ForbiddenException('Access to resource denied');
-
     return this.prisma.shop.update({
       where: { rootDomain: shopRootDomain },
       data: { ...dto }
