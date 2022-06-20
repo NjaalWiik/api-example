@@ -5,9 +5,11 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from '../src/user/dto';
-import { CreateProductDto, EditProductDto } from 'src/product/dto';
+import { CreateProductDto, EditProductDto } from '../src/product/dto';
 import { inspect } from 'util';
-import { CreateOfferDto } from 'src/offer/dto/create-offer.dto';
+import { CreateOfferDto } from '../src/offer/dto/create-offer.dto';
+import { CreateShopDto, EditShopDto } from '../src/shop/dto';
+import { EditOfferDto } from 'src/offer/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -182,8 +184,7 @@ describe('App e2e', () => {
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .withBody(dto)
           .expectStatus(201)
-          .stores('productUrl', 'url')
-          .inspect();
+          .stores('productUrl', 'url');
       });
 
       describe('Get products', () => {
@@ -253,29 +254,227 @@ describe('App e2e', () => {
     });
   });
 
+  describe('Shop', () => {
+    const rootDomain = 'testshop.no';
+
+    describe('Get empty shops', () => {
+      it('Should get empty shops array', () => {
+        return pactum.spec().get('/shops').expectStatus(200).expectBody([]);
+      });
+    });
+
+    describe('Create shop', () => {
+      const dto: CreateShopDto = {
+        pricespyId: 12345678,
+        name: 'Test Shop',
+        companyName: 'Test Shop AS',
+        rootDomain: 'testshop.no',
+        logo176: 'testshop.no/image176',
+        logo88: 'testshop.no/image88',
+        favicon: 'testshop.no/favicon',
+        externalUri: 'prisjakt.no/externalUri',
+        information: 'Denne butikken er super til å teste med.',
+        countryCode: 'no',
+        market: 'no',
+        currency: 'NOK',
+        importance: 1,
+        storeLocationCount: 123
+      };
+      it('should create shop', () => {
+        return pactum
+          .spec()
+          .post('/shops')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(201)
+          .stores('rootDomain', 'rootDomain');
+      });
+      it('Should throw if same root domain is added', () => {
+        return pactum
+          .spec()
+          .post('/shops')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(403);
+      });
+      it('Should throw if same root domain is added', () => {
+        return pactum
+          .spec()
+          .post('/shops')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody({ name: 'New Shop', rootDomain: 'newshop.no' })
+          .expectStatus(201);
+      });
+
+      describe('Get shops', () => {
+        it('Should get shops array with length of one', () => {
+          return pactum
+            .spec()
+            .get('/shops')
+            .expectStatus(200)
+            .expectJsonLength(2);
+        });
+      });
+    });
+
+    describe('Get shop by root domain', () => {
+      it('Should get shops array', () => {
+        return pactum
+          .spec()
+          .get('/shops/{rootDomain}')
+          .withPathParams('rootDomain', rootDomain)
+          .expectStatus(200)
+          .expectBodyContains('testshop.no');
+      });
+    });
+
+    describe('Edit shop by root domain', () => {
+      const dto: EditShopDto = {
+        name: 'Test Shop Better',
+        pricespyId: 865244
+      };
+      it('Should edit a shop', () => {
+        return pactum
+          .spec()
+          .patch('/shops/{shopRootDomain}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withPathParams('shopRootDomain', rootDomain)
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.name)
+          .expectBodyContains(dto.pricespyId);
+      });
+    });
+
+    describe('Delete shop', () => {
+      const updatedEncodedUri = encodeURIComponent('testshop.no');
+
+      it('Should delete a product', () => {
+        return pactum
+          .spec()
+          .delete('/shops/{shopRootDomain}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withPathParams('shopRootDomain', updatedEncodedUri)
+          .expectStatus(204);
+      });
+      it('Should get empty shops', () => {
+        return pactum
+          .spec()
+          .get('/shops')
+          .expectStatus(200)
+          .expectJsonLength(1);
+      });
+    });
+  });
+
   describe('Offer', () => {
+    const rootDomain = 'newshop.no';
+
+    describe('Get empty offers', () => {
+      it('Should get empty offers array', () => {
+        return pactum.spec().get('/offers').expectStatus(200).expectBody([]);
+      });
+    });
+
     describe('Create offer', () => {
       const dto: CreateOfferDto = {
-        rootDomain: 'test.no',
+        rootDomain: 'newshop.no',
         type: 'coupon',
         amount: 100,
         amountType: '%'
       };
-
-      it('Should create user', () => {
+      it('should create offer', () => {
         return pactum
           .spec()
           .post('/offers')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .withBody(dto)
-          .expectStatus(201)
-          .inspect();
+          .stores('offerId', 'id')
+          .expectStatus(201);
+      });
+      it('Should throw if not correct data is provided', () => {
+        return pactum
+          .spec()
+          .post('/offers')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody({})
+          .expectStatus(403);
+      });
+      it('Should create new offer', () => {
+        return pactum
+          .spec()
+          .post('/offers')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody({
+            rootDomain: 'newshop.no',
+            type: 'coupon',
+            amount: 50,
+            amountType: '%'
+          })
+          .expectStatus(201);
+      });
+
+      describe('Get offers', () => {
+        it('Should get offers array with length of one', () => {
+          return pactum
+            .spec()
+            .get('/offers')
+            .expectStatus(200)
+            .expectJsonLength(2);
+        });
       });
     });
 
-    describe('Get offers', () => {});
+    describe('Get offers by root domain', () => {
+      it('Should get offers array', () => {
+        return pactum
+          .spec()
+          .get('/offers/{rootDomain}')
+          .withPathParams('rootDomain', rootDomain)
+          .expectStatus(200)
+          .expectBodyContains('newshop.no')
+          .expectJsonLength(2);
+      });
+    });
 
-    describe('Get offer by id', () => {});
+    describe('Edit offer by id', () => {
+      const dto: EditOfferDto = {
+        page: 'newshop.no/super-offer',
+        terms: 'Only for today',
+        amount: 59,
+        feedbackNegative: 2
+      };
+      it('Should edit a shop', () => {
+        return pactum
+          .spec()
+          .patch('/offers/{offerId}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withPathParams('offerId', '$S{offerId}')
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.page)
+          .expectBodyContains(dto.feedbackNegative);
+      });
+    });
 
-    describe('Delete offer', () => {});
+    describe('Delete offer', () => {
+      const updatedEncodedUri = encodeURIComponent('testshop.no');
+
+      it('Should delete a product', () => {
+        return pactum
+          .spec()
+          .delete('/offers/{shopRootDomain}')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withPathParams('shopRootDomain', updatedEncodedUri)
+          .expectStatus(204);
+      });
+      it('Should get offers with one element', () => {
+        return pactum
+          .spec()
+          .get('/shops')
+          .expectStatus(200)
+          .expectJsonLength(1);
+      });
+    });
   });
 });

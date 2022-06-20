@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateOfferDto } from './dto/create-offer.dto';
+import { CreateOfferDto } from './dto';
 
 @Injectable()
 export class OfferService {

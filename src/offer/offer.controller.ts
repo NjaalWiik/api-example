@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
-import { CreateOfferDto } from './dto/create-offer.dto';
+import { CreateOfferDto } from './dto';
 import { OfferService } from './offer.service';
 
 @Controller('offers')

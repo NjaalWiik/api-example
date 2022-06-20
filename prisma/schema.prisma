@@ -52,6 +52,7 @@ model Shop {
   countryCode        String?
   market             String?
   currency           String?
+  importance         Int?
   storeLocationCount Int?
 
   Offers Offer[]
@@ -64,10 +65,10 @@ model Offer {
   updatedAt DateTime @updatedAt
 
   rootDomain       String
-  type             String
-  coupon           String?
+  type             String // coupon || deal
+  coupon           String? // The actual coupon code
   name             String?
-  page             String?
+  page             String? // Url to the deal page
   terms            String?
   trackinUrl       String?
   validTo          DateTime?
