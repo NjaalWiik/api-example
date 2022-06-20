@@ -1,7 +1,6 @@
 import {
   IsBoolean,
   IsDateString,
-  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -9,14 +8,18 @@ import {
 } from 'class-validator';
 
 export class EditOfferDto {
+  @IsNumber()
+  @IsOptional()
+  id?: number;
+
   @IsString()
   @IsUrl()
   @IsOptional()
-  rootDomain: string;
+  rootDomain?: string;
 
   @IsString()
   @IsOptional()
-  type: string;
+  type?: string;
 
   @IsString()
   @IsOptional()
@@ -48,11 +51,11 @@ export class EditOfferDto {
 
   @IsNumber()
   @IsOptional()
-  amount: number;
+  amount?: number;
 
   @IsString()
   @IsOptional()
-  amountType: string;
+  amountType?: string;
 
   @IsBoolean()
   @IsOptional()
@@ -73,4 +76,12 @@ export class EditOfferDto {
   @IsNumber()
   @IsOptional()
   clicked?: number;
+
+  @IsString()
+  @IsOptional()
+  source?: string;
+
+  @IsString()
+  @IsOptional()
+  lastVerified?: Date;
 }

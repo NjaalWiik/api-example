@@ -1,6 +1,6 @@
 export declare class EditOfferDto {
-    rootDomain: string;
-    type: string;
+    rootDomain?: string;
+    type?: string;
     coupon?: string;
     name?: string;
     page?: string;
@@ -8,8 +8,8 @@ export declare class EditOfferDto {
     trackinUrl?: string;
     validTo?: Date;
     validFrom?: Date;
-    amount: number;
-    amountType: string;
+    amount?: number;
+    amountType?: string;
     verifiedCoupon?: boolean;
     status?: string;
     feedbackPositive?: number;

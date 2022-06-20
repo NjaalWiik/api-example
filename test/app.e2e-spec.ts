@@ -7,9 +7,8 @@ import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from '../src/user/dto';
 import { CreateProductDto, EditProductDto } from '../src/product/dto';
 import { inspect } from 'util';
-import { CreateOfferDto } from '../src/offer/dto/create-offer.dto';
 import { CreateShopDto, EditShopDto } from '../src/shop/dto';
-import { EditOfferDto } from 'src/offer/dto';
+import { CreateOfferDto, EditOfferDto } from '../src/offer/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -398,7 +397,7 @@ describe('App e2e', () => {
           .post('/offers')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .withBody({})
-          .expectStatus(403);
+          .expectStatus(400);
       });
       it('Should create new offer', () => {
         return pactum
@@ -415,7 +414,7 @@ describe('App e2e', () => {
       });
 
       describe('Get offers', () => {
-        it('Should get offers array with length of one', () => {
+        it('Should get offers array with length of two', () => {
           return pactum
             .spec()
             .get('/offers')
@@ -442,7 +441,8 @@ describe('App e2e', () => {
         page: 'newshop.no/super-offer',
         terms: 'Only for today',
         amount: 59,
-        feedbackNegative: 2
+        feedbackNegative: 2,
+        lastVerified: new Date(2022, 6, 20, 13, 42)
       };
       it('Should edit a shop', () => {
         return pactum
@@ -453,25 +453,24 @@ describe('App e2e', () => {
           .withBody(dto)
           .expectStatus(200)
           .expectBodyContains(dto.page)
-          .expectBodyContains(dto.feedbackNegative);
+          .expectBodyContains(dto.feedbackNegative)
+          .inspect();
       });
     });
 
     describe('Delete offer', () => {
-      const updatedEncodedUri = encodeURIComponent('testshop.no');
-
-      it('Should delete a product', () => {
+      it('Should delete an offer by id', () => {
         return pactum
           .spec()
-          .delete('/offers/{shopRootDomain}')
+          .delete('/offers/{offerId}')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
-          .withPathParams('shopRootDomain', updatedEncodedUri)
+          .withPathParams('offerId', '$S{offerId}')
           .expectStatus(204);
       });
       it('Should get offers with one element', () => {
         return pactum
           .spec()
-          .get('/shops')
+          .get('/offers')
           .expectStatus(200)
           .expectJsonLength(1);
       });

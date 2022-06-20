@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateOfferDto } from './dto';
+import { CreateOfferDto, EditOfferDto } from './dto';
 
 @Injectable()
 export class OfferService {
@@ -11,7 +11,21 @@ export class OfferService {
     return await this.prisma.offer.findMany();
   }
 
-  getOffersByDomain() {}
+  async getOffersByDomain(rootDomain: string) {
+    return await this.prisma.offer.findMany({
+      where: {
+        rootDomain
+      }
+    });
+  }
+
+  async getOfferById(offerId: number) {
+    return await this.prisma.offer.findUnique({
+      where: {
+        id: offerId
+      }
+    });
+  }
 
   async createOffer(dto: CreateOfferDto) {
     try {
@@ -31,7 +45,22 @@ export class OfferService {
     }
   }
 
-  editOfferById() {}
+  async editOfferById(offerId: number, dto: EditOfferDto) {
+    const offer = await this.prisma.product.findUnique({
+      where: {
+        id: offerId
+      }
+    });
 
-  deleteOfferById() {}
+    return this.prisma.offer.update({
+      where: { id: offerId },
+      data: { ...dto }
+    });
+  }
+
+  async deleteOfferById(offerId: number) {
+    return this.prisma.offer.delete({
+      where: { id: offerId }
+    });
+  }
 }

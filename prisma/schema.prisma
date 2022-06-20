@@ -80,6 +80,8 @@ model Offer {
   feedbackPositive Int?
   feedbackNegative Int?
   clicked          Int?
+  source           String?
+  lastVerified     DateTime?
 
   shop Shop @relation(fields: [rootDomain], references: [rootDomain], onDelete: Cascade)
 

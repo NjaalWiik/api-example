@@ -73,4 +73,12 @@ export class CreateOfferDto {
   @IsNumber()
   @IsOptional()
   clicked?: number;
+
+  @IsString()
+  @IsOptional()
+  source?: string;
+
+  @IsString()
+  @IsOptional()
+  lastVerified?: Date;
 }

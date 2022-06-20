@@ -1,5 +1,18 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
-import { CreateOfferDto } from './dto';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards
+} from '@nestjs/common';
+import { JwtGuard } from '../auth/guard';
+import { CreateOfferDto, EditOfferDto } from './dto';
 import { OfferService } from './offer.service';
 
 @Controller('offers')
@@ -7,19 +20,38 @@ export class OfferController {
   constructor(private offerService: OfferService) {}
 
   @Get()
-  getOffers() {}
+  getOffers() {
+    return this.offerService.getOffers();
+  }
 
-  @Get(':domain')
-  getOffersByDomain() {}
+  @Get(':rootDomain')
+  getOffersByDomain(@Param('rootDomain') rootDomain: string) {
+    return this.offerService.getOffersByDomain(rootDomain);
+  }
+
+  @Get('offer/:offerId')
+  getOffersById(@Param('offerId', ParseIntPipe) offerId: number) {
+    return this.offerService.getOfferById(offerId);
+  }
 
   @Post()
   createOffer(@Body() dto: CreateOfferDto) {
     return this.offerService.createOffer(dto);
   }
 
-  @Patch()
-  editOfferById() {}
+  @UseGuards(JwtGuard)
+  @Patch(':offerId')
+  editProductByUrl(
+    @Body() dto: EditOfferDto,
+    @Param('offerId', ParseIntPipe) offerId: number
+  ) {
+    return this.offerService.editOfferById(offerId, dto);
+  }
 
-  @Delete()
-  deleteOfferById() {}
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtGuard)
+  @Delete(':offerId')
+  deleteOfferById(@Param('offerId', ParseIntPipe) offerId: number) {
+    return this.offerService.deleteOfferById(offerId);
+  }
 }
