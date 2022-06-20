@@ -36,7 +36,11 @@ export class OfferController {
 
   @Post()
   createOffer(@Body() dto: CreateOfferDto) {
-    return this.offerService.createOffer(dto);
+    const status = this.offerService.checkStatus(dto.validFrom, dto.validTo);
+    return this.offerService.createOffer({
+      status,
+      ...dto
+    });
   }
 
   @UseGuards(JwtGuard)

@@ -45,6 +45,23 @@ export class OfferService {
     }
   }
 
+  checkStatus = (validFrom: Date, validTo: Date) => {
+    const date = new Date();
+
+    let status;
+    if (validTo) {
+      const to = new Date(validTo);
+      status = date > to ? 'Expired' : 'Active';
+    } else if (validFrom) {
+      const from = new Date(validFrom);
+      status = date < from ? 'Scheduled' : 'Active';
+    } else {
+      status = 'Active';
+    }
+
+    return status;
+  };
+
   async editOfferById(offerId: number, dto: EditOfferDto) {
     const offer = await this.prisma.product.findUnique({
       where: {

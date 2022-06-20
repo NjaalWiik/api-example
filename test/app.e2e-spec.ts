@@ -399,7 +399,9 @@ describe('App e2e', () => {
           .withBody({})
           .expectStatus(400);
       });
-      it('Should create new offer', () => {
+      it('Should create new offer with status of Scheduled', () => {
+        let validFrom = new Date();
+        validFrom.setDate(validFrom.getDate() + 3);
         return pactum
           .spec()
           .post('/offers')
@@ -408,9 +410,28 @@ describe('App e2e', () => {
             rootDomain: 'newshop.no',
             type: 'coupon',
             amount: 50,
-            amountType: '%'
+            amountType: '%',
+            validFrom
           })
-          .expectStatus(201);
+          .expectStatus(201)
+          .expectBodyContains('Scheduled');
+      });
+      it('Should create new offer with status of Expired', () => {
+        let validTo = new Date();
+        validTo.setDate(validTo.getDate() - 3);
+        return pactum
+          .spec()
+          .post('/offers')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody({
+            rootDomain: 'newshop.no',
+            type: 'coupon',
+            amount: 50,
+            amountType: '%',
+            validTo
+          })
+          .expectStatus(201)
+          .expectBodyContains('Expired');
       });
 
       describe('Get offers', () => {
@@ -419,7 +440,7 @@ describe('App e2e', () => {
             .spec()
             .get('/offers')
             .expectStatus(200)
-            .expectJsonLength(2);
+            .expectJsonLength(3);
         });
       });
     });
@@ -432,7 +453,7 @@ describe('App e2e', () => {
           .withPathParams('rootDomain', rootDomain)
           .expectStatus(200)
           .expectBodyContains('newshop.no')
-          .expectJsonLength(2);
+          .expectJsonLength(3);
       });
     });
 
@@ -453,8 +474,7 @@ describe('App e2e', () => {
           .withBody(dto)
           .expectStatus(200)
           .expectBodyContains(dto.page)
-          .expectBodyContains(dto.feedbackNegative)
-          .inspect();
+          .expectBodyContains(dto.feedbackNegative);
       });
     });
 
@@ -467,12 +487,12 @@ describe('App e2e', () => {
           .withPathParams('offerId', '$S{offerId}')
           .expectStatus(204);
       });
-      it('Should get offers with one element', () => {
+      it('Should get offers with two element', () => {
         return pactum
           .spec()
           .get('/offers')
           .expectStatus(200)
-          .expectJsonLength(1);
+          .expectJsonLength(2);
       });
     });
   });
