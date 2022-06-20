@@ -1,5 +1,5 @@
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateOfferDto } from './dto/create-offer.dto';
+import { CreateOfferDto } from './dto';
 export declare class OfferService {
     private prisma;
     constructor(prisma: PrismaService);

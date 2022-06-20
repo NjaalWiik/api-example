@@ -1,4 +1,4 @@
-import { CreateOfferDto } from './dto/create-offer.dto';
+import { CreateOfferDto } from './dto';
 import { OfferService } from './offer.service';
 export declare class OfferController {
     private offerService;

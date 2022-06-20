@@ -47,11 +47,11 @@ export class EditOfferDto {
   validFrom?: Date;
 
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   amount: number;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   amountType: string;
 
   @IsBoolean()

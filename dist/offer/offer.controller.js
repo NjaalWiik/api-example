@@ -14,7 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OfferController = void 0;
 const common_1 = require("@nestjs/common");
-const create_offer_dto_1 = require("./dto/create-offer.dto");
+const dto_1 = require("./dto");
 const offer_service_1 = require("./offer.service");
 let OfferController = class OfferController {
     constructor(offerService) {
@@ -44,7 +44,7 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_offer_dto_1.CreateOfferDto]),
+    __metadata("design:paramtypes", [dto_1.CreateOfferDto]),
     __metadata("design:returntype", void 0)
 ], OfferController.prototype, "createOffer", null);
 __decorate([
