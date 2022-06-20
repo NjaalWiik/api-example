@@ -94,5 +94,15 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], CreateOfferDto.prototype, "clicked", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateOfferDto.prototype, "source", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Date)
+], CreateOfferDto.prototype, "lastVerified", void 0);
 exports.CreateOfferDto = CreateOfferDto;
 //# sourceMappingURL=create-offer.dto.js.map

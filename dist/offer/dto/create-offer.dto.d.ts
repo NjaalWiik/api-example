@@ -15,4 +15,6 @@ export declare class CreateOfferDto {
     feedbackPositive?: number;
     feedbackNegative?: number;
     clicked?: number;
+    source?: string;
+    lastVerified?: Date;
 }

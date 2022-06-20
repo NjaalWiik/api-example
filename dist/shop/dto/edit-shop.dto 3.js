@@ -9,105 +9,79 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EditOfferDto = void 0;
+exports.EditShopDto = void 0;
 const class_validator_1 = require("class-validator");
-class EditOfferDto {
+class EditShopDto {
 }
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
-], EditOfferDto.prototype, "id", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsUrl)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], EditOfferDto.prototype, "rootDomain", void 0);
+], EditShopDto.prototype, "pricespyId", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], EditOfferDto.prototype, "type", void 0);
+], EditShopDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], EditOfferDto.prototype, "coupon", void 0);
+], EditShopDto.prototype, "companyName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], EditOfferDto.prototype, "name", void 0);
+], EditShopDto.prototype, "rootDomain", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], EditOfferDto.prototype, "page", void 0);
+], EditShopDto.prototype, "logo176", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], EditOfferDto.prototype, "terms", void 0);
+], EditShopDto.prototype, "logo88", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], EditOfferDto.prototype, "trackinUrl", void 0);
+], EditShopDto.prototype, "favicon", void 0);
 __decorate([
-    (0, class_validator_1.IsDateString)(),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Date)
-], EditOfferDto.prototype, "validTo", void 0);
+    __metadata("design:type", String)
+], EditShopDto.prototype, "externalUri", void 0);
 __decorate([
-    (0, class_validator_1.IsDateString)(),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Date)
-], EditOfferDto.prototype, "validFrom", void 0);
+    __metadata("design:type", String)
+], EditShopDto.prototype, "information", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], EditShopDto.prototype, "countryCode", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], EditShopDto.prototype, "market", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], EditShopDto.prototype, "currency", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
-], EditOfferDto.prototype, "amount", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], EditOfferDto.prototype, "amountType", void 0);
-__decorate([
-    (0, class_validator_1.IsBoolean)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Boolean)
-], EditOfferDto.prototype, "verifiedCoupon", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], EditOfferDto.prototype, "status", void 0);
+], EditShopDto.prototype, "importance", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
-], EditOfferDto.prototype, "feedbackPositive", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Number)
-], EditOfferDto.prototype, "feedbackNegative", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Number)
-], EditOfferDto.prototype, "clicked", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], EditOfferDto.prototype, "source", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Date)
-], EditOfferDto.prototype, "lastVerified", void 0);
-exports.EditOfferDto = EditOfferDto;
-//# sourceMappingURL=edit-offer.dto.js.map
+], EditShopDto.prototype, "storeLocationCount", void 0);
+exports.EditShopDto = EditShopDto;
+//# sourceMappingURL=edit-shop.dto.js.map

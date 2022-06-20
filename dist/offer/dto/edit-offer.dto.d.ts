@@ -1,4 +1,5 @@
 export declare class EditOfferDto {
+    id?: number;
     rootDomain?: string;
     type?: string;
     coupon?: string;
@@ -15,4 +16,6 @@ export declare class EditOfferDto {
     feedbackPositive?: number;
     feedbackNegative?: number;
     clicked?: number;
+    source?: string;
+    lastVerified?: Date;
 }
