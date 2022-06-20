@@ -34,6 +34,7 @@ export class ShopService {
         if (error.code === 'P2002') {
           throw new ForbiddenException('Root domain exists');
         }
+
         throw error;
       }
     }
