@@ -17,5 +17,6 @@ RUN npm run prisma:generate
 #RUN npm run build
 
 EXPOSE 3333
+
 # Start the server using the production build
 CMD [ "npm","run", "deploy-cluster" ]
