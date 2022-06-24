@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {});
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true
@@ -12,10 +12,9 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Api example')
+    .setDescription('The example API description')
     .setVersion('1.0')
-    .addTag('cats')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
